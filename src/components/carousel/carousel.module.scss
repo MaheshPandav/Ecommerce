@@ -1,46 +1,15 @@
-.carousel-container {
-  position: relative;
-  max-width: 800px;
-  height: 80vh;
-}
-
-.carousel {
-  max-width: 800px;
-
-  height: 100%;
-}
-
-.carousel-slide {
-  display: flex;
-  max-width: 800px;
-
-  height: 100%;
-  transition: transform 0.5s ease-in-out;
-  gap: 20px;
-}
-
-.carousel-image {
-  max-width: 800px;
-
-  height: 100%;
-  object-fit: cover; /* Ensures the image covers the whole slide */
-}
-
-.carousel-button {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  padding: 10px 15px;
-  font-size: 16px;
-  cursor: pointer;
-  border: none;
-  background-color: #f0f0f0;
-}
-
-.carousel-button.next {
-  right: 10px;
-}
-
-.carousel-button.prev {
-  left: 10px;
+.main-slider{
+  max-width: 1850px;
+  margin: 0 auto;
+  .slider{
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    img{
+      height: 450px;
+      width: 100%;
+      object-fit: cover;
+      border-radius: 30px;
+    }
+  }
 }

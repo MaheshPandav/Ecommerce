@@ -1,11 +1,18 @@
 import React from "react";
-import style from "./button.module.scss";
+import "./button.scss";
 
 const Button = (props) => {
-  const { onClick, children } = props;
+  const { onClick, className, children, type } = props;
   return (
-    <div class={style["button-borders"]}>
-      <button className={style["primary-button"]} onClick={onClick} {...props}>
+    <div
+      className={`${"button-borders"} ${props.btnType} ${className}`}
+      style={props?.style}
+    >
+      <button
+        className={`${"primary-button"} ${props.btnType}`}
+        onClick={onClick}
+        type={type}
+      >
         {children}
       </button>
     </div>

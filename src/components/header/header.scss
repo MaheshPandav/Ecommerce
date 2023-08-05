@@ -6,7 +6,7 @@ header {
 
   .header-content {
     height: 70px;
-    background: #fff;
+    background: #fff9;
     display: flex;
     align-items: center;
     padding: 0 30px;
@@ -48,58 +48,6 @@ header {
             }
           }
         }
-
-        @media (max-width: 1220px) {
-          padding-top: 10px;
-          .buy-credit,
-          .user-container .user {
-            margin-right: 10px;
-          }
-          button {
-            height: 44px !important;
-            font-size: 15px !important;
-            border-radius: 10px !important;
-            padding: 0 10px;
-          }
-        }
-        @media (max-width: 992px) {
-          padding-top: 0;
-        }
-      }
-    }
-  }
-  @media screen and (max-width: 992px) {
-    .headline {
-      .container {
-        justify-content: center;
-        .news {
-          display: none !important;
-        }
-      }
-    }
-    .header-content {
-      ul {
-        display: none !important;
-      }
-      .container {
-        .right-section {
-          strong,
-          button {
-            display: none;
-          }
-          .user-container {
-            margin-top: 10px;
-          }
-          .login {
-            box-shadow: none;
-          }
-          .menu-icn,
-          .login {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-          }
-        }
       }
     }
   }
@@ -115,96 +63,15 @@ header {
       }
     }
   }
-}
 
-.drawer-content {
-  .close-icn {
-    padding-left: 10px;
-    margin: 3px 0 -3px 0;
-    width: fit-content;
-  }
-  .drawer-logo {
+  form {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: white;
-    padding: 6px 0;
-    img {
-      height: 50px;
-      margin: 15px 0;
-    }
-    @media (max-width: 577px) {
-      padding: 0;
-      img {
-        height: 40px;
-        margin: 15px 0;
-      }
-    }
-  }
-  ul {
-    margin: 0;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    padding-bottom: 20px;
 
-    .list-container {
-      gap: 10px;
-      a {
-        font-size: 20px;
-      }
-      .about,
-      .games,
-      .buy-now {
-        display: flex;
-        align-items: center;
-        height: 45px;
-        justify-content: center;
-      }
-    }
-    .primary-btn {
-      &::after,
-      &::before {
-        display: none;
-      }
-    }
-  }
-}
-
-.close-icn {
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  padding-left: 20px;
-  height: 50px;
-
-  span {
-    height: 5px;
-    width: 30px;
-    border-radius: 3px;
-    position: absolute;
-    transform: rotate(-45deg);
-    top: 20px;
-
-    &:first-child {
-      transform: rotate(45deg);
-    }
-  }
-}
-
-@media only screen and (max-width: 1200px) {
-  header {
-    .headline {
-      .container {
-        .news {
-          .content {
-            p {
-              max-width: 390px;
-            }
-          }
-        }
-      }
+    .submit {
+      margin-top: 20px;
     }
   }
 }

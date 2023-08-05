@@ -23,9 +23,9 @@
   &.full-width {
     transform: translateY(-100%);
     transition-delay: 0s;
-    transition-duration: .5s;
+    transition-duration: 0.5s;
     transition-property: all;
-    transition-timing-function: cubic-bezier(.165,.84,.44,1);
+    transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
     .modalInner {
       margin: 0;
       max-width: 100%;
@@ -47,13 +47,18 @@
 
 .modalInner {
   background-color: #fff;
-  border-radius: 15px;
-  padding: 20px;
+  padding: 20px 40px;
   margin: 0 48px;
   max-width: 600px;
   overflow: hidden;
   position: relative;
   width: calc(100% - 48px * 2);
+
+  @media (max-width: 450px) {
+    padding: 10px 20px;
+    width: calc(100%);
+    margin: 0 20px;
+  }
 }
 
 .x-mark-wrapper {
