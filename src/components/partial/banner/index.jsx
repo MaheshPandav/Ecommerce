@@ -1,9 +1,12 @@
-import React from 'react'
+import React from "react";
+import Carousel from "../../../components/carousel/index";
 
 function Banner() {
   return (
-    <div>Banner</div>
-  )
+    <div>
+      <Carousel/>
+    </div>
+  );
 }
 
-export default Banner
+export default Banner;

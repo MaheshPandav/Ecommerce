@@ -1,0 +1,18 @@
+.allproduct-main {
+  max-width: 1850px;
+  margin: 0 auto;
+  margin-top: 40px;
+  .title-view {
+    display: flex;
+    justify-content: space-between;
+    .product-title {
+      font-size: 24px;
+      font-weight: 500;
+      line-height: 1;
+      color: #161824;
+    }
+  }
+  .all-product {
+    margin-top: 30px;
+  }
+}
