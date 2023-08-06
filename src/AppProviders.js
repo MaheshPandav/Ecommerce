@@ -1,7 +1,8 @@
-import React, { Fragment } from "react";
+import { Provider } from "react-redux";
+import store from "./redux/store/store";
 
 function AppProviders({ children }) {
-  return <Fragment>{children}</Fragment>;
+  return <Provider store={store}>{children}</Provider>;
 }
 
 export default AppProviders;
