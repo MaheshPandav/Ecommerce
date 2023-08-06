@@ -1,3 +1,33 @@
 :root {
-  --primary-color: "red";
+  //------------COLORS------------//
+  --primary-color: #0e1822;
+  --primary-color-90: #0e182290;
+  --primary-color-60: #0e182260;
+  --primary-color-50: #0e182250;
+  --primary-color-40: #0e182240;
+  --primary-color-30: #0e182230;
+  --primary-color-20: #0e182220;
+  --primary-color-10: #0e182210;
+  --primary-color-05: #0e182210;
+  --primary-bg-color: #f4f7fe;
+  --primary-dark-color: #158fbb;
+  --primary-dark-color-80: #158fbb80;
+  --primary-dark-color-40: #158fbb40;
+  --error-color: rgba(255, 0, 0, 0.38);
+  --error-bg-color: rgba(6, 0, 32, 0.803);
+  --grey-color: rgb(179, 179, 179);
+  --light-grey-color: #d4d7e0;
+  --border-grey-color: #e0e5f2;
+  --placeholder-color: #a3aed0;
+  --white: rgba(255, 255, 255);
+  --black: rgba(0, 0, 0);
+  --black-50: rgba(0, 0, 0, 0.5);
+  --toastify-color-success: #0e1822;
+  --primary-red-color: #ff4655;
+  --primary-red-color-90: #ff465590;
+  --primary-success-color: #5cb85c;
+  //------------FONTS------------//
+
+  --primary-font: "Luckiest Guy", sans-serif;
+  --secondary-font: "Poppins", sans-serif;
 }
