@@ -1,12 +1,10 @@
 .productbox-main {
   .productbox {
-    background-color: rgb(241 241 243/1);
     gap: 15px;
-    width: 250px;
-    border-radius: 15px;
-    padding: 10px;
+    max-width: 270px;
+    padding: 20px 10px;
     overflow: hidden;
-    box-shadow: 0 0 20px 0 rgba(0, 68, 155, 0.188);
+    border: 1px solid var(--primary-color);
     min-height: 350px;
     .product-image {
       width: 250px;
@@ -54,9 +52,14 @@
       align-items: center;
       justify-content: space-around;
       padding: 8px;
-      border: 1px solid rgba(0, 68, 155, 0.125);
+      border: 1px solid var(--primary-color);
       margin-top: 10px;
-      border-radius: 8px;
+
+      > svg {
+        margin: 0;
+        font-size: 22px;
+        cursor: pointer;
+      }
     }
   }
 }

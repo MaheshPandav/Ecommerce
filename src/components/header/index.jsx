@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useCallback, useMemo, useState } from "react";
 import Logo from "../../assets/images/app-logo.png";
 import Button from "../button";
 import "./header.scss";
@@ -25,13 +25,19 @@ function Header() {
   const [modalType, setModalType] = useState("");
   const [type, setType] = useState("error");
   const [state, setState] = useState({
+    userName: "",
     email: "",
     password: "",
+    confirmPassword: "",
   });
   const [error, setError] = useState({
+    userName: "",
     email: "",
     password: "",
+    confirmPassword: "",
   });
+
+  const isSignIn = useMemo(() => modalType === "SignIn", [modalType]);
 
   const toggleDrawer = () => {
     setIsOpenDrawer(!isOpenDrawer);
@@ -44,12 +50,16 @@ function Header() {
 
   const clearStates = () => {
     setState({
+      userName: "",
       email: "",
       password: "",
+      confirmPassword: "",
     });
     setError({
+      userName: "",
       email: "",
       password: "",
+      confirmPassword: "",
     });
   };
   const handleOnChange = (event) => {
@@ -67,13 +77,30 @@ function Header() {
           ? "Please enter valid email"
           : "",
       }));
-    } else {
+    } else if (name === "password") {
       setError((prev) => ({
         ...prev,
         [name]: !value.trim()
           ? "Password is required"
           : !value.match(passwordReg)
           ? "Please enter valid password"
+          : "",
+      }));
+    } else if (name === "confirmPassword") {
+      setError((prev) => ({
+        ...prev,
+        [name]: !value.trim()
+          ? "confirmPassword is required"
+          : value !== state.password
+          ? "Password and confirm password must be the same"
+          : "",
+
+      }));
+    }else{
+      setError((prev) => ({
+        ...prev,
+        [name]: !value.trim()
+          ? "User Name is required"
           : "",
       }));
     }
@@ -100,15 +127,15 @@ function Header() {
   };
 
   const handleSignup = () => {
-    const { email, password } = state;
+    const { userName, email, password } = state;
     const storedUsers = JSON.parse(localStorage.getItem("user-data")) || [];
-    const existingUser = storedUsers.find((user) => user.email === email);
+    const existingUser = storedUsers.find((user) => user.userName === userName);
     if (existingUser) {
       onError("User already exists with this email.");
       return;
     }
     const userToken = Math.random().toString(36).substr(2, 10);
-    const newUser = { email, password };
+    const newUser = { userName, email, password };
     storedUsers.push(newUser);
     localStorage.setItem("user-data", JSON.stringify(storedUsers));
     setToken(userToken);
@@ -117,11 +144,14 @@ function Header() {
   };
 
   const handleSignin = () => {
-    const { email, password } = state;
+    console.log('hellp')
+
+    const { userName, password } = state;
     const storedUsers = JSON.parse(localStorage.getItem("user-data")) || [];
-    const user = storedUsers.find((user) => user.email === email);
+    const user = storedUsers.find((user) => user.userName === userName);
     const userToken = Math.random().toString(36).substr(2, 10);
     if (!user || user.password !== password) {
+      console.log('hellp')
       onError("User not found or incorrect password.");
       return;
     }
@@ -130,36 +160,88 @@ function Header() {
     onSuccess("Login successful! Welcome back!");
   };
 
+  const isSignupValidateFields = useMemo(
+    () =>
+      !state.userName?.trim() ||
+      !state.email?.trim() ||
+      !state.password?.trim() ||
+      !state.password !== !state.confirmPassword ||
+      !state.confirmPassword?.trim() ||
+      !state.email.match(errorReg) ||
+      !state.password.match(passwordReg),
+    [state.confirmPassword, state.email, state.password, state.userName]
+  );
+
+  const isSignInValidateFields = useMemo(
+    () =>
+      !state.userName?.trim() ||
+      !state.password?.trim() ||
+      !state.email.match(errorReg) ||
+      !state.password.match(passwordReg),
+    [state.email, state.password, state.userName]
+  );
+
+  const isValidate = useMemo(
+    () =>
+      modalType === "SignIn"
+        ? !isSignInValidateFields
+        : !isSignupValidateFields,
+    [isSignInValidateFields, isSignupValidateFields, modalType]
+  );
+
+  const handleValidation = useCallback(() => {
+    const { userName, email, confirmPassword, password } = state;
+    if (!isValidate) {
+      if (modalType === "SignIn") {
+        setError((prev) => ({
+          ...prev,
+          userName: !userName.trim() ? "User Name is required" : "",
+          password: !password.trim()
+            ? "Password is required"
+            : !password.match(passwordReg)
+            ? "Please enter valid password"
+            : "",
+        }));
+      } else {
+        setError((prev) => ({
+          ...prev,
+          userName: !userName.trim() ? "User Name is required" : "",
+          email: !email.trim()
+            ? "Email is required"
+            : !email.match(errorReg)
+            ? "Please enter valid email"
+            : "",
+          password: !password.trim()
+            ? "Password is required"
+            : !password.match(passwordReg)
+            ? "Please enter valid password"
+            : "",
+          confirmPassword: !confirmPassword.trim()
+            ? "Password is required"
+            : password !== confirmPassword
+            ? "Password and confirm password must be the same"
+            : "",
+        }));
+      }
+      return false;
+    } else {
+      return true;
+    }
+  }, [isValidate, modalType, state]);
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (
-      !state.email.trim() ||
-      !state.password.trim() ||
-      !state.email.match(errorReg) ||
-      !state.password.match(passwordReg)
-    ) {
-      setError((prev) => ({
-        ...prev,
-        email: !state.email.trim()
-          ? "Email is required"
-          : !state.email.match(errorReg)
-          ? "Please enter valid email"
-          : "",
-        password: !state.password.trim()
-          ? "Password is required"
-          : !state.password.match(passwordReg)
-          ? "Please enter valid password"
-          : "",
-      }));
-      return;
+    const isValid = handleValidation();
+    if (isValid) {
+      console.log(isSignIn)
+      if (isSignIn) {
+        handleSignin();
+      } else {
+        handleSignup();
+      }
+      toggleModal("");
+      clearStates();
     }
-    if (modalType === "SignIn") {
-      handleSignin();
-    } else {
-      handleSignup();
-    }
-    toggleModal("");
-    clearStates();
   };
 
   const handleLogout = () => {
@@ -185,14 +267,25 @@ function Header() {
       >
         <form onSubmit={handleSubmit}>
           <InputField
-            label="Email"
-            name="email"
-            value={state.email}
+            label="User Name"
+            name="userName"
+            value={state.userName}
             type="text"
-            placeholder="Enter Email"
+            placeholder="Enter User Name"
             onChange={handleOnChange}
-            error={error.email}
+            error={error.userName}
           />
+          {!isSignIn && (
+            <InputField
+              label="Email"
+              name="email"
+              value={state.email}
+              type="text"
+              placeholder="Enter Email"
+              onChange={handleOnChange}
+              error={error.email}
+            />
+          )}
           <InputField
             label="Password"
             name="password"
@@ -202,6 +295,17 @@ function Header() {
             onChange={handleOnChange}
             error={error.password}
           />
+          {!isSignIn && (
+            <InputField
+              label="Confirm Password"
+              name="confirmPassword"
+              value={state.confirmPassword}
+              type="text"
+              placeholder="Enter Confirm Password"
+              onChange={handleOnChange}
+              error={error.confirmPassword}
+            />
+          )}
           <Button type="submit" btnType="half-width" className="submit">
             {modalType}
           </Button>
@@ -223,7 +327,6 @@ function Header() {
             )}
           </div>
           <MenuIcon onClick={toggleDrawer} />
-
         </div>
       </div>
     </header>
