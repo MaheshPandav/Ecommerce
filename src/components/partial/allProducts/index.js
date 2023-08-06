@@ -9,8 +9,13 @@ import { Select } from "antd";
 import { getProductCategories } from "../../../redux/slice/getProductCatagorySlice";
 import { getProductByCategories } from "../../../redux/slice/getProductByCategoriesSlice";
 import { Input } from "antd";
+import Button from "../../button";
+import AddNewProduct from "../addProduct";
+import ProductDetails from "../productDetails";
+import EditProduct from "../editProduct";
 
 const AllProduct = (props) => {
+  const token = localStorage.getItem("token");
   const {
     callgetAllProduct,
     callDeleteProduct,
@@ -23,12 +28,27 @@ const AllProduct = (props) => {
   const { Search } = Input;
   const [allProductData, setAllProductData] = useState([]);
   const [searchLoading, setSearchLoading] = useState(false);
+  const [addProductModal, setAddProductModal] = useState(false);
+  const [productDetails, setProdctDetails] = useState({});
+  const [productDetailsModal, setProductDetailsModal] = useState(false);
+  const [editProductModal, setEditProductModal] = useState(false);
+  const [search, setSearch] = useState('');
 
   const allProducts = () => {
     callgetAllProduct().then((response) => {
       setAllProductData(response.payload);
     });
   };
+
+  const handleViewProduct = (item) => {
+    setProdctDetails(item);
+    setProductDetailsModal(true);
+  };
+
+  const handleEditModal = (item) =>{
+    setEditProductModal(true)
+    setProdctDetails(item);
+  }
 
   const options = produCtcategories?.map((item) => ({
     value: item,
@@ -75,20 +95,27 @@ const AllProduct = (props) => {
   const handleSearch = (event) => {
     clearTimeout(typingTimer);
     const inputValue = event.target.value;
-    if (inputValue !== '') {
+    if (inputValue !== "") {
       const filterValue = allProductData.filter((product) =>
-      product.title.toLowerCase().includes(inputValue.toLowerCase())
-  );
-   setAllProductData(filterValue)
+        product.title.toLowerCase().includes(inputValue.toLowerCase())
+      );
+      setAllProductData(filterValue);
     }
-    setSearchLoading(true)
-    if (inputValue !== '') {
+    if(inputValue === ""){
+      allProducts();
+    }
+    setSearchLoading(true);
+    if (inputValue !== "") {
       typingTimer = setTimeout(() => {
-        setSearchLoading(false)
+        setSearchLoading(false);
       }, typingTimeout);
     } else {
-      setSearchLoading(false)
+      setSearchLoading(false);
     }
+  };
+
+  const handleAddProduct = () => {
+    setAddProductModal(true);
   };
 
   return (
@@ -97,17 +124,18 @@ const AllProduct = (props) => {
       <div className={style["allproduct-main"]}>
         <div className={style["title-view"]}>
           <div className={style["product-title"]}>All Products</div>
-          <div className={style["product-title"]}>
+   
+          {token && <Button onClick={handleAddProduct}>Add Product</Button>}
+        </div>
+        <div className={style['filter-view']}>
             <Search
               placeholder="Search product by name"
-              enterButton="Search"
+              enterKeyHint="hello"
               size="large"
               loading={searchLoading}
-              style={{ width: 380 }}
+              style={{ width: 250 }}
               onChange={handleSearch}
             />
-          </div>
-          <div>
             <Select
               showSearch
               allowClear
@@ -122,8 +150,8 @@ const AllProduct = (props) => {
               style={{ width: 250 }}
               options={options}
             />
-          </div>
         </div>
+   
         <div className={style["all-product"]}>
           {allProductData &&
             allProductData?.map((item, index) => {
@@ -132,10 +160,30 @@ const AllProduct = (props) => {
                   item={item}
                   index={index}
                   handleDelete={handleDelete}
+                  handleViewProduct={handleViewProduct}
+                  handleEditModal={handleEditModal}
                 />
               );
             })}
         </div>
+        <AddNewProduct
+          addProductModal={addProductModal}
+          setAddProductModal={setAddProductModal}
+          options={options}
+          setAllProductData={setAllProductData}
+          allProductData={allProductData}
+        />
+        <ProductDetails
+          productDetailsModal={productDetailsModal}
+          productDetails={productDetails}
+          setProductDetailsModal={setProductDetailsModal}
+        />
+        <EditProduct
+        editProductModal={editProductModal}
+        productDetails={productDetails}
+        setEditProductModal={setEditProductModal}
+        options={options}
+        />
       </div>
     </>
   );

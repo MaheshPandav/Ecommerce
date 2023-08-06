@@ -141,24 +141,23 @@ function Header() {
     setToken(userToken);
     localStorage.setItem("token", userToken);
     onSuccess("Signup successful! You can now login.");
+    window.location.reload()
   };
 
-  const handleSignin = () => {
-    console.log('hellp')
-
-    const { userName, password } = state;
-    const storedUsers = JSON.parse(localStorage.getItem("user-data")) || [];
-    const user = storedUsers.find((user) => user.userName === userName);
-    const userToken = Math.random().toString(36).substr(2, 10);
-    if (!user || user.password !== password) {
-      console.log('hellp')
-      onError("User not found or incorrect password.");
-      return;
-    }
-    setToken(userToken);
-    localStorage.setItem("token", userToken);
-    onSuccess("Login successful! Welcome back!");
-  };
+    const handleSignin = () => {
+      const { userName, password } = state;
+      const storedUsers = JSON.parse(localStorage.getItem("user-data")) || [];
+      const user = storedUsers.find((user) => user.userName === userName);
+      const userToken = Math.random().toString(36).substr(2, 10);
+      if (!user || user.password !== password) {
+        onError("User not found or incorrect password.");
+        return;
+      }
+      setToken(userToken);
+      localStorage.setItem("token", userToken);
+      onSuccess("Login successful! Welcome back!");
+      window.location.reload()
+    };
 
   const isSignupValidateFields = useMemo(
     () =>
@@ -233,7 +232,6 @@ function Header() {
     event.preventDefault();
     const isValid = handleValidation();
     if (isValid) {
-      console.log(isSignIn)
       if (isSignIn) {
         handleSignin();
       } else {
@@ -248,6 +246,7 @@ function Header() {
     localStorage.removeItem("token");
     setToken(null);
     onError("User logged out!");
+    window.location.reload()
   };
   return (
     <header id="header">
@@ -314,11 +313,11 @@ function Header() {
       <div className="header-content">
         <div className="container">
           <div className="left-section">
-            <img alt="" src={Logo} className="site-logo" />
+            <img alt="" src={Logo} className="site-logo" onClick={()=>window.location.reload()} />
           </div>
           <div className="right-section">
             {token ? (
-              <Button onClick={handleLogout}>logout</Button>
+              <Button onClick={handleLogout}>Logout</Button>
             ) : (
               <Fragment>
                 <Button onClick={() => toggleModal("SignIn")}>login</Button>
