@@ -221,8 +221,9 @@ function Header() {
                 <Button onClick={() => toggleModal("Sign-Up")}>signup</Button>
               </Fragment>
             )}
-            <MenuIcon onClick={toggleDrawer} />
           </div>
+          <MenuIcon onClick={toggleDrawer} />
+
         </div>
       </div>
     </header>
