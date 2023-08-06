@@ -10,7 +10,7 @@ const ProductBox = (props) => {
   return (
     <div className={style["productbox-main"]}>
       <div className={style["productbox"]}>
-        <img src={item.image} className={style["product-image"]} />
+        <img src={item.image} className={style["product-image"]} alt="" />
         <div className={style["product-price"]}>Price : {item.price}</div>
         <div className={style["product-name"]}>{item.title}</div>
         <div>
@@ -19,24 +19,13 @@ const ProductBox = (props) => {
         <div className={style["product-desc"]}>{item.description}</div>
 
         <div className={style["action"]}>
-          <div>
-            <BsEye size={22} color="green" style={{ cursor: "pointer" }} />
-          </div>
-          <div>
-            <BiSolidPencil
-              size={22}
-              color="orange"
-              style={{ cursor: "pointer" }}
-            />
-          </div>
-          <div>
-            <AiOutlineDelete
-              size={22}
-              color="red"
-              style={{ cursor: "pointer" }}
-              onClick={() => handleDelete(item.id)}
-            />
-          </div>
+          
+            <BsEye />
+         
+            <BiSolidPencil />
+          
+            <AiOutlineDelete onClick={() => handleDelete(item.id)} />
+          
         </div>
       </div>
     </div>
