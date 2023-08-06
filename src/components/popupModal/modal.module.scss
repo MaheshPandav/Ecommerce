@@ -18,7 +18,7 @@
   transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
   visibility: hidden;
   width: 100%;
-  z-index: 1;
+  z-index: 1002;
 
   &.full-width {
     transform: translateY(-100%);
@@ -53,6 +53,7 @@
   overflow: hidden;
   position: relative;
   width: calc(100% - 48px * 2);
+  border-radius: 10px;
 
   @media (max-width: 450px) {
     padding: 10px 20px;

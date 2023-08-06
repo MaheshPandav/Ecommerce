@@ -5,13 +5,23 @@
   .title-view {
     display: flex;
     justify-content: space-between;
-    padding: 20px 0;
+    padding: 15px 10px;
+    align-items: center;
+    border-left: 3px solid grey;
+    background-color: #eee;
+    border-radius: 5px;
     .product-title {
       font-size: 24px;
       font-weight: 500;
       line-height: 1;
       color: #161824;
     }
+  }
+  .filter-view{
+    display: flex;
+    margin-top: 20px;
+    gap: 30px;
+    flex-wrap: wrap;
   }
   .all-product {
     display: flex;
@@ -20,5 +30,6 @@
     margin-top: 20px;
     align-items: center;
     justify-content: center;
+    margin-bottom: 30px;
   }
 }

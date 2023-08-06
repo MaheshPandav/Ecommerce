@@ -4,8 +4,9 @@
     max-width: 270px;
     padding: 20px 10px;
     overflow: hidden;
-    border: 1px solid var(--primary-color);
+    border: 1px solid #ccc;
     min-height: 350px;
+    border-radius: 10px;
     .product-image {
       width: 250px;
       height: 250px;
@@ -54,7 +55,7 @@
       padding: 8px;
       border: 1px solid var(--primary-color);
       margin-top: 10px;
-
+      border-radius: 10px;
       > svg {
         margin: 0;
         font-size: 22px;

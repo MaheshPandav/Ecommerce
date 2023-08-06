@@ -143,6 +143,7 @@ function Header() {
     setToken(userToken);
     setUser(userName);
     onSuccess("Signup successful! You can now login.");
+    window.location.reload()
   };
 
   const handleSignin = () => {
@@ -234,7 +235,6 @@ function Header() {
     const isValid = handleValidation();
     console.log(isValid);
     if (isValid) {
-      console.log(isSignIn);
       if (isSignIn) {
         handleSignin();
       } else {
@@ -249,6 +249,7 @@ function Header() {
     localStorage.removeItem("user-name");
     setToken(null);
     onError("User logged out!");
+    window.location.reload()
   };
   return (
     <header id="header">
@@ -314,7 +315,7 @@ function Header() {
       <div className="header-content">
         <div className="container">
           <div className="left-section">
-            <img alt="" src={Logo} className="site-logo" />
+            <img alt="" src={Logo} className="site-logo" onClick={()=>window.location.reload()} />
           </div>
           <div className="right-section">
             {token ? (
@@ -325,8 +326,8 @@ function Header() {
               </Fragment>
             ) : (
               <Fragment>
-                <Button onClick={() => toggleModal("SignIn")}>login</Button>
-                <Button onClick={() => toggleModal("Sign-Up")}>signup</Button>
+                <Button onClick={() => toggleModal("SignIn")}>Login</Button>
+                <Button onClick={() => toggleModal("Sign-Up")}>Signup</Button>
               </Fragment>
             )}
           </div>
