@@ -154,7 +154,9 @@ const EditProduct = (props) => {
             options={options}
             value={product.category}
           />
+          <div style={{display:'flex', alignItems:'center',justifyContent:'center'}}>
           <Button>Edit Product</Button>
+          </div>
         </form>
       </PopupModal>
     </div>

@@ -320,8 +320,8 @@ function Header() {
               <Button onClick={handleLogout}>Logout</Button>
             ) : (
               <Fragment>
-                <Button onClick={() => toggleModal("SignIn")}>login</Button>
-                <Button onClick={() => toggleModal("Sign-Up")}>signup</Button>
+                <Button onClick={() => toggleModal("SignIn")}>Login</Button>
+                <Button onClick={() => toggleModal("Sign-Up")}>Signup</Button>
               </Fragment>
             )}
           </div>

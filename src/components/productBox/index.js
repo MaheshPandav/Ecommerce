@@ -13,7 +13,6 @@ const ProductBox = (props) => {
     if (token) {
       handleEditModal(item);
     } else {
-      // Show an error notification if the user doesn't have permission
       notification.error({
         message: 'Permission Error',
         description: 'You do not have permission to edit. You need to login first',
@@ -25,7 +24,6 @@ const ProductBox = (props) => {
     if (token) {
       handleDelete(item.id);
     } else {
-      // Show an error notification if the user doesn't have permission
       notification.error({
         message: 'Permission Error',
         description: 'You do not have permission to delete.  You need to login first',
