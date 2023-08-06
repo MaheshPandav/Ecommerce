@@ -31,6 +31,15 @@ header {
         align-items: center;
         position: relative;
         gap: 20px;
+
+        .user-logo {
+          height: 30px;
+          width: 30px;
+          border-radius:15px;
+        }
+        strong {
+          margin: 0 20px 0 -10px;
+        }
       }
       .menu-icn {
         display: none;
