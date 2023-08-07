@@ -51,6 +51,7 @@ function Header() {
     setIsModal(!isModal);
     setModalType(type);
     isModal && clearStates();
+    setIsOpenDrawer(false);
   };
 
   const clearStates = () => {
@@ -240,6 +241,7 @@ function Header() {
 
   const handleLogout = () => {
     dispatch(handleUserLogout());
+    setIsOpenDrawer(!isOpenDrawer);
     onError("User logged out!");
   };
   return (
@@ -306,11 +308,7 @@ function Header() {
       <div className="header-content">
         <div className="container">
           <div className="left-section">
-            <img
-              alt=""
-              src={Logo}
-              className="site-logo"
-            />
+            <img alt="" src={Logo} className="site-logo" />
           </div>
           <div className="right-section">
             {token ? (
@@ -341,6 +339,40 @@ function Header() {
           <MenuIcon onClick={toggleDrawer} />
         </div>
       </div>
+      <PopupModal
+        isVisible={isOpenDrawer}
+        title={"Account"}
+        onClose={() => {
+          setIsOpenDrawer(!isOpenDrawer);
+        }}
+      >
+        <div className="mobile-header">
+          {token ? (
+            <Fragment>
+              <img src={User} alt="" className="user-logo" />
+              <strong>{user}</strong>
+              <Button onClick={handleLogout} className="auth-button">
+                logout
+              </Button>
+            </Fragment>
+          ) : (
+            <Fragment>
+              <Button
+                onClick={() => toggleModal("SignIn")}
+                className="auth-button"
+              >
+                Login
+              </Button>
+              <Button
+                onClick={() => toggleModal("Sign-Up")}
+                className="auth-button"
+              >
+                Signup
+              </Button>
+            </Fragment>
+          )}
+        </div>
+      </PopupModal>
     </header>
   );
 }
