@@ -1,5 +1,6 @@
 import React, { Fragment, useCallback, useMemo, useState } from "react";
 import Logo from "../../assets/images/app-logo.png";
+import User from "../../assets/images/user.png";
 import Button from "../button";
 import "./header.scss";
 import PopupModal from "../popupModal";
@@ -18,6 +19,7 @@ const MenuIcon = (props) => {
 };
 function Header() {
   const [token, setToken] = useState(localStorage.getItem("token"));
+  const [user, setUser] = useState(localStorage.getItem("user-name"));
   const [isOpenDrawer, setIsOpenDrawer] = useState(false);
   const [isModal, setIsModal] = useState(false);
   const [isNotification, setIsNotification] = useState(false);
@@ -46,6 +48,7 @@ function Header() {
   const toggleModal = (type) => {
     setIsModal(!isModal);
     setModalType(type);
+    isModal && clearStates();
   };
 
   const clearStates = () => {
@@ -94,14 +97,11 @@ function Header() {
           : value !== state.password
           ? "Password and confirm password must be the same"
           : "",
-
       }));
-    }else{
+    } else {
       setError((prev) => ({
         ...prev,
-        [name]: !value.trim()
-          ? "User Name is required"
-          : "",
+        [name]: !value.trim() ? "User Name is required" : "",
       }));
     }
   };
@@ -138,26 +138,29 @@ function Header() {
     const newUser = { userName, email, password };
     storedUsers.push(newUser);
     localStorage.setItem("user-data", JSON.stringify(storedUsers));
-    setToken(userToken);
+    localStorage.setItem("user-name", userName);
     localStorage.setItem("token", userToken);
+    setToken(userToken);
+    setUser(userName);
     onSuccess("Signup successful! You can now login.");
     window.location.reload()
   };
 
-    const handleSignin = () => {
-      const { userName, password } = state;
-      const storedUsers = JSON.parse(localStorage.getItem("user-data")) || [];
-      const user = storedUsers.find((user) => user.userName === userName);
-      const userToken = Math.random().toString(36).substr(2, 10);
-      if (!user || user.password !== password) {
-        onError("User not found or incorrect password.");
-        return;
-      }
-      setToken(userToken);
-      localStorage.setItem("token", userToken);
-      onSuccess("Login successful! Welcome back!");
-      window.location.reload()
-    };
+  const handleSignin = () => {
+    const { userName, password } = state;
+    const storedUsers = JSON.parse(localStorage.getItem("user-data")) || [];
+    const user = storedUsers.find((user) => user.userName === userName);
+    const userToken = Math.random().toString(36).substr(2, 10);
+    if (!user || user.password !== password) {
+      onError("User not found or incorrect password.");
+      return;
+    }
+    setToken(userToken);
+    setUser(userName);
+    localStorage.setItem("token", userToken);
+    localStorage.setItem("user-name", userName);
+    onSuccess("Login successful! Welcome back!");
+  };
 
   const isSignupValidateFields = useMemo(
     () =>
@@ -175,9 +178,8 @@ function Header() {
     () =>
       !state.userName?.trim() ||
       !state.password?.trim() ||
-      !state.email.match(errorReg) ||
       !state.password.match(passwordReg),
-    [state.email, state.password, state.userName]
+    [state.password, state.userName]
   );
 
   const isValidate = useMemo(
@@ -231,6 +233,7 @@ function Header() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const isValid = handleValidation();
+    console.log(isValid);
     if (isValid) {
       if (isSignIn) {
         handleSignin();
@@ -238,12 +241,12 @@ function Header() {
         handleSignup();
       }
       toggleModal("");
-      clearStates();
     }
   };
 
   const handleLogout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("user-name");
     setToken(null);
     onError("User logged out!");
     window.location.reload()
@@ -261,7 +264,6 @@ function Header() {
         title={modalType}
         onClose={() => {
           toggleModal("");
-          clearStates();
         }}
       >
         <form onSubmit={handleSubmit}>
@@ -317,7 +319,11 @@ function Header() {
           </div>
           <div className="right-section">
             {token ? (
-              <Button onClick={handleLogout}>Logout</Button>
+              <Fragment>
+                <img src={User} alt="" className="user-logo" />
+                <strong>{user}</strong>
+                <Button onClick={handleLogout}>logout</Button>
+              </Fragment>
             ) : (
               <Fragment>
                 <Button onClick={() => toggleModal("SignIn")}>Login</Button>
