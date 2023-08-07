@@ -7,8 +7,8 @@
     justify-content: space-between;
     padding: 15px 10px;
     align-items: center;
-    border-left: 3px solid grey;
-    background-color: #eee;
+    border-left: 3px solid var(--primary-color);
+    background-color: var(--primary-color-30);
     border-radius: 5px;
     .product-title {
       font-size: 24px;

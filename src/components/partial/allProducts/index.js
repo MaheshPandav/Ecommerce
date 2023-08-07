@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import style from "./allProduct.module.scss";
 import ProductBox from "../../productBox";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import { getAllProduct } from "../../../redux/slice/getAllProductSlice";
 import { deleteProduct } from "../../../redux/slice/deleteProductSlice";
 import Loading from "../../Loader";
@@ -15,7 +15,6 @@ import ProductDetails from "../productDetails";
 import EditProduct from "../editProduct";
 
 const AllProduct = (props) => {
-  const token = localStorage.getItem("token");
   const {
     callgetAllProduct,
     callDeleteProduct,
@@ -32,23 +31,23 @@ const AllProduct = (props) => {
   const [productDetails, setProdctDetails] = useState({});
   const [productDetailsModal, setProductDetailsModal] = useState(false);
   const [editProductModal, setEditProductModal] = useState(false);
-  const [search, setSearch] = useState('');
+  const { token } = useSelector((state) => state.user);
 
-  const allProducts = () => {
-    callgetAllProduct().then((response) => {
+  const allProducts = useCallback(async () => {
+    await callgetAllProduct().then((response) => {
       setAllProductData(response.payload);
     });
-  };
+  }, [callgetAllProduct]);
 
-  const handleViewProduct = (item) => {
+  const handleViewProduct = useCallback((item) => {
     setProdctDetails(item);
     setProductDetailsModal(true);
-  };
+  }, []);
 
-  const handleEditModal = (item) =>{
-    setEditProductModal(true)
+  const handleEditModal = useCallback((item) => {
+    setEditProductModal(true);
     setProdctDetails(item);
-  }
+  }, []);
 
   const options = produCtcategories?.map((item) => ({
     value: item,
@@ -58,36 +57,43 @@ const AllProduct = (props) => {
   useEffect(() => {
     allProducts();
     callGetProductCategories();
-  }, [callgetAllProduct]);
+  }, [allProducts, callGetProductCategories, callgetAllProduct]);
 
-  const handleDelete = async (id) => {
-    await callDeleteProduct(id).then((response) => {
-      if (response.type === "products/fulfilled") {
-        setAllProductData(
-          allProductData.filter((product) => product.id !== id)
-        );
-      } else {
-        console.log("error");
-      }
-    });
-  };
-  const onCategoriesChange = async (categories) => {
-    try {
-      if (categories === undefined) {
-        const response = await callgetAllProduct();
-        setAllProductData(response.payload);
-      } else {
-        const response = await callGetProductByCategories(categories);
-        if (response.payload && response.payload.length > 0) {
+  const handleDelete = useCallback(
+    async (id) => {
+      await callDeleteProduct(id).then((response) => {
+        if (response.type === "products/fulfilled") {
+          setAllProductData(
+            allProductData.filter((product) => product.id !== id)
+          );
+        } else {
+          console.log("error");
+        }
+      });
+    },
+    [allProductData, callDeleteProduct]
+  );
+
+  const onCategoriesChange = useCallback(
+    async (categories) => {
+      try {
+        if (categories === undefined) {
+          const response = await callgetAllProduct();
           setAllProductData(response.payload);
         } else {
-          setAllProductData([]);
+          const response = await callGetProductByCategories(categories);
+          if (response.payload && response.payload.length > 0) {
+            setAllProductData(response.payload);
+          } else {
+            setAllProductData([]);
+          }
         }
+      } catch (error) {
+        console.error("Error while fetching data:", error);
       }
-    } catch (error) {
-      console.error("Error while fetching data:", error);
-    }
-  };
+    },
+    [callGetProductByCategories, callgetAllProduct]
+  );
 
   let typingTimer;
   const typingTimeout = 1000;
@@ -101,7 +107,7 @@ const AllProduct = (props) => {
       );
       setAllProductData(filterValue);
     }
-    if(inputValue === ""){
+    if (inputValue === "") {
       allProducts();
     }
     setSearchLoading(true);
@@ -124,34 +130,32 @@ const AllProduct = (props) => {
       <div className={style["allproduct-main"]}>
         <div className={style["title-view"]}>
           <div className={style["product-title"]}>All Products</div>
-   
+
           {token && <Button onClick={handleAddProduct}>Add Product</Button>}
         </div>
-        <div className={style['filter-view']}>
-            <Search
-              placeholder="Search product by name"
-              enterKeyHint="hello"
-              size="large"
-              loading={searchLoading}
-              style={{ width: 250 }}
-              onChange={handleSearch}
-            />
-            <Select
-              showSearch
-              allowClear
-              size="large"
-              placeholder="Select Categories"
-              onChange={onCategoriesChange}
-              filterOption={(input, option) =>
-                (option?.label ?? "")
-                  .toLowerCase()
-                  .includes(input.toLowerCase())
-              }
-              style={{ width: 250 }}
-              options={options}
-            />
+        <div className={style["filter-view"]}>
+          <Search
+            placeholder="Search product by name"
+            enterKeyHint="hello"
+            size="large"
+            loading={searchLoading}
+            style={{ width: 250 }}
+            onChange={handleSearch}
+          />
+          <Select
+            showSearch
+            allowClear
+            size="large"
+            placeholder="Select Categories"
+            onChange={onCategoriesChange}
+            filterOption={(input, option) =>
+              (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
+            }
+            style={{ width: 250 }}
+            options={options}
+          />
         </div>
-   
+
         <div className={style["all-product"]}>
           {allProductData &&
             allProductData?.map((item, index) => {
@@ -179,10 +183,10 @@ const AllProduct = (props) => {
           setProductDetailsModal={setProductDetailsModal}
         />
         <EditProduct
-        editProductModal={editProductModal}
-        productDetails={productDetails}
-        setEditProductModal={setEditProductModal}
-        options={options}
+          editProductModal={editProductModal}
+          productDetails={productDetails}
+          setEditProductModal={setEditProductModal}
+          options={options}
         />
       </div>
     </>

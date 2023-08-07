@@ -6,6 +6,7 @@ import getProductCatagorySlice from "../slice/getProductCatagorySlice";
 import getProductByCategoriesSlice from "../slice/getProductByCategoriesSlice";
 import addProductSlice from "../slice/addProductSlice";
 import editProductSlice from "../slice/editProductSlice";
+import authSlice from "../slice/authSlice";
 
 export default configureStore({
   reducer: {
@@ -15,6 +16,7 @@ export default configureStore({
     productByCategories: getProductByCategoriesSlice,
     addProduct: addProductSlice,
     editProduct: editProductSlice,
+    user: authSlice,
   },
   middleware: [thunk],
 });

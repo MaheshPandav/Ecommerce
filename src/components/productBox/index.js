@@ -6,7 +6,8 @@ import { AiOutlineDelete } from "react-icons/ai";
 import { Rate, notification } from "antd";
 
 const ProductBox = (props) => {
-  const { item, handleDelete, handleViewProduct, handleEditModal } = props;
+  const { item, index, handleDelete, handleViewProduct, handleEditModal } =
+    props;
   const token = localStorage.getItem("token");
 
   const handleEdit = () => {
@@ -14,24 +15,26 @@ const ProductBox = (props) => {
       handleEditModal(item);
     } else {
       notification.error({
-        message: 'Permission Error',
-        description: 'You do not have permission to edit. You need to login first',
+        message: "Permission Error",
+        description:
+          "You do not have permission to edit. You need to login first",
       });
     }
   };
-  
+
   const handleDeletes = () => {
     if (token) {
       handleDelete(item.id);
     } else {
       notification.error({
-        message: 'Permission Error',
-        description: 'You do not have permission to delete.  You need to login first',
+        message: "Permission Error",
+        description:
+          "You do not have permission to delete.  You need to login first",
       });
     }
   };
   return (
-    <div className={style["productbox-main"]}>
+    <div className={style["productbox-main"]} key={index}>
       <div className={style["productbox"]}>
         <img src={item.image} className={style["product-image"]} alt="" />
         <div className={style["product-price"]}>Price : {item.price}</div>
@@ -43,9 +46,9 @@ const ProductBox = (props) => {
         )}
         <div className={style["product-desc"]}>{item.description}</div>
         <div className={style["action"]}>
-          <BsEye onClick={()=>handleViewProduct(item)}/>
-          <BiSolidPencil onClick={handleEdit}/>
-          <AiOutlineDelete onClick={handleDeletes} />
+          <BsEye onClick={() => handleViewProduct(item)} color="#fff"/>
+          <BiSolidPencil onClick={handleEdit} color="#fff"/>
+          <AiOutlineDelete onClick={handleDeletes} color="#fff"/>
         </div>
       </div>
     </div>

@@ -1,5 +1,5 @@
 import React, { Fragment, useCallback, useMemo, useState } from "react";
-import Logo from "../../assets/images/app-logo.png";
+import Logo from "../../assets/images/app-logo-white.svg";
 import User from "../../assets/images/user.png";
 import Button from "../button";
 import "./header.scss";
@@ -7,6 +7,8 @@ import PopupModal from "../popupModal";
 import InputField from "../InputField";
 import { errorReg, passwordReg } from "../../utils/regex";
 import Notification from "../notification";
+import { useDispatch, useSelector } from "react-redux";
+import { handleUserLogin, handleUserLogout } from "../../redux/slice/authSlice";
 
 const MenuIcon = (props) => {
   return (
@@ -18,8 +20,8 @@ const MenuIcon = (props) => {
   );
 };
 function Header() {
-  const [token, setToken] = useState(localStorage.getItem("token"));
-  const [user, setUser] = useState(localStorage.getItem("user-name"));
+  const { token, user } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
   const [isOpenDrawer, setIsOpenDrawer] = useState(false);
   const [isModal, setIsModal] = useState(false);
   const [isNotification, setIsNotification] = useState(false);
@@ -138,12 +140,8 @@ function Header() {
     const newUser = { userName, email, password };
     storedUsers.push(newUser);
     localStorage.setItem("user-data", JSON.stringify(storedUsers));
-    localStorage.setItem("user-name", userName);
-    localStorage.setItem("token", userToken);
-    setToken(userToken);
-    setUser(userName);
+    dispatch(handleUserLogin({ token: userToken, user: userName }));
     onSuccess("Signup successful! You can now login.");
-    window.location.reload()
   };
 
   const handleSignin = () => {
@@ -155,10 +153,7 @@ function Header() {
       onError("User not found or incorrect password.");
       return;
     }
-    setToken(userToken);
-    setUser(userName);
-    localStorage.setItem("token", userToken);
-    localStorage.setItem("user-name", userName);
+    dispatch(handleUserLogin({ token: userToken, user: userName }));
     onSuccess("Login successful! Welcome back!");
   };
 
@@ -233,7 +228,6 @@ function Header() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const isValid = handleValidation();
-    console.log(isValid);
     if (isValid) {
       if (isSignIn) {
         handleSignin();
@@ -245,11 +239,8 @@ function Header() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user-name");
-    setToken(null);
+    dispatch(handleUserLogout());
     onError("User logged out!");
-    window.location.reload()
   };
   return (
     <header id="header">
@@ -315,19 +306,35 @@ function Header() {
       <div className="header-content">
         <div className="container">
           <div className="left-section">
-            <img alt="" src={Logo} className="site-logo" onClick={()=>window.location.reload()} />
+            <img
+              alt=""
+              src={Logo}
+              className="site-logo"
+            />
           </div>
           <div className="right-section">
             {token ? (
               <Fragment>
                 <img src={User} alt="" className="user-logo" />
                 <strong>{user}</strong>
-                <Button onClick={handleLogout}>logout</Button>
+                <Button onClick={handleLogout} className="auth-button">
+                  logout
+                </Button>
               </Fragment>
             ) : (
               <Fragment>
-                <Button onClick={() => toggleModal("SignIn")}>Login</Button>
-                <Button onClick={() => toggleModal("Sign-Up")}>Signup</Button>
+                <Button
+                  onClick={() => toggleModal("SignIn")}
+                  className="auth-button"
+                >
+                  Login
+                </Button>
+                <Button
+                  onClick={() => toggleModal("Sign-Up")}
+                  className="auth-button"
+                >
+                  Signup
+                </Button>
               </Fragment>
             )}
           </div>
